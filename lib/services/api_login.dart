@@ -21,9 +21,6 @@ class LoginApi {
 
         usuario.salvarDados();
 
-        Usuario userPrefs = await Usuario.getUserFromPrefs();
-        print('User das prefs >>> $userPrefs');
-
         return ApiResponse.isOk(usuario);
       }
       return ApiResponse.error(responseJson['error']);
