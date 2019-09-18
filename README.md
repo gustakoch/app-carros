@@ -1,4 +1,4 @@
-# carros
+# App com lista de carros
 
 A new Flutter project.
 
