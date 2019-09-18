@@ -98,9 +98,6 @@ class _LoginPageState extends State<LoginPage> {
     ApiResponse response = await LoginApi.login(login, senha);
 
     if (response.isOk) {
-      Usuario usuario = response.result;
-
-      print('>>>> $usuario');
       push(context, HomePage(), replace: true);
     } else {
       alertDialog(context, response.message);

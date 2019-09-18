@@ -19,6 +19,11 @@ class LoginApi {
       if (response.statusCode == 200) {
         final usuario = Usuario.fromJson(responseJson);
 
+        usuario.salvarDados();
+
+        Usuario userPrefs = await Usuario.getUserFromPrefs();
+        print('User das prefs >>> $userPrefs');
+
         return ApiResponse.isOk(usuario);
       }
       return ApiResponse.error(responseJson['error']);

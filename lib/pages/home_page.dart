@@ -22,7 +22,6 @@ class _HomePageState extends State<HomePage>
 
   _initTabs() async {
     _tabController = TabController(length: 3, vsync: this);
-
     _tabController.addListener(() {
       Prefs.setInt('tabIndex', _tabController.index);
     });

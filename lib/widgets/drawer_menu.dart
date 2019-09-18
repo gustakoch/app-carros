@@ -1,20 +1,31 @@
 import 'package:carros/pages/login_page.dart';
 import 'package:carros/resources/nav.dart';
+import 'package:carros/resources/usuario.dart';
 import 'package:flutter/material.dart';
 
 class DrawerMenu extends StatelessWidget {
+  _header(Usuario usuario) {
+    return UserAccountsDrawerHeader(
+      accountName: Text(usuario.nome),
+      accountEmail: Text(usuario.email),
+      currentAccountPicture: CircleAvatar(
+        backgroundImage: NetworkImage(usuario.urlFoto),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountEmail: Text('gustavok@outlook.com.br'),
-              accountName: Text('Gustavo Koch'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/profile.jpg'),
-              ),
+            FutureBuilder<Usuario>(
+              future: Usuario.getUserFromPrefs(),
+              builder: (context, snapshot) {
+                Usuario usuario = snapshot.data;
+                return usuario != null ? _header(usuario) : Container();
+              },
             ),
             ListTile(
               leading: Icon(Icons.home),
