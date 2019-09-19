@@ -23,6 +23,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+
+    Future<Usuario> usuario = Usuario.getUserFromPrefs();
+    usuario.then((usuario) {
+      if (usuario != null) {
+        push(context, HomePage(), replace: true);
+      }
+    });
   }
 
   @override

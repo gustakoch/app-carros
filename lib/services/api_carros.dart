@@ -1,4 +1,5 @@
 import 'package:carros/resources/carro.dart';
+import 'package:carros/resources/usuario.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -10,12 +11,19 @@ class TipoCarro {
 
 class CarrosApi {
   static Future<List<Carro>> getCarros(String tipo) async {
-    var url = 'http://carros-springboot.herokuapp.com/api/v1/carros/tipo/$tipo';
-    var response = await http.get(url);
+    Usuario usuario = await Usuario.getUserFromPrefs();
+
+    Map<String, String> headers = {
+      'Content-Type': "application/json",
+      'Authorization': "Bearer ${usuario.token}"
+    };
+
+    var url = 'http://carros-springboot.herokuapp.com/api/v2/carros/tipo/$tipo';
+    var response = await http.get(url, headers: headers);
 
     List list = json.decode(response.body);
 
-    final carros = list.map((item) => Carro.fromJson(item)).toList();
+    List<Carro> carros = list.map((item) => Carro.fromJson(item)).toList();
 
     return carros;
   }

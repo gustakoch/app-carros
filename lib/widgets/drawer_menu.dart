@@ -60,6 +60,7 @@ class DrawerMenu extends StatelessWidget {
   }
 
   _onClickLogout(context) {
+    Usuario.clear();
     Navigator.pop(context);
     push(context, LoginPage(), replace: true);
   }
