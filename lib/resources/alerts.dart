@@ -9,7 +9,7 @@ alertDialog(BuildContext context, String message) {
         content: Text(message),
         actions: <Widget>[
           FlatButton(
-            child: Text('Ok'),
+            child: Text('Fechar'),
             onPressed: () {
               Navigator.pop(context);
             },
