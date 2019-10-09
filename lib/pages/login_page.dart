@@ -1,12 +1,13 @@
 import 'package:carros/pages/home_page.dart';
 import 'package:carros/resources/alerts.dart';
+import 'package:carros/resources/login_bloc.dart';
 import 'package:carros/resources/nav.dart';
 import 'package:carros/resources/usuario.dart';
-import 'package:carros/services/api_login.dart';
 import 'package:carros/services/api_response.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,11 +15,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final bloc = LoginBloc();
   final _loginController = TextEditingController();
   final _senhaController = TextEditingController();
   final _focusSenha = FocusNode();
   var _formKey = GlobalKey<FormState>();
-  bool _showProgress = false;
 
   @override
   void initState() {
@@ -74,17 +75,21 @@ class _LoginPageState extends State<LoginPage> {
               keyboardType: TextInputType.number,
               focusNode: _focusSenha,
             ),
-            _showProgress
-                ? Container(
-                    margin: EdgeInsets.only(top: 20),
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : AppButton(
-                    'LOGIN',
-                    onPressed: _onClickLogin,
-                  ),
+            StreamBuilder<bool>(
+                stream: bloc.stream,
+                builder: (context, snapshot) {
+                  return snapshot.data ?? false
+                      ? Container(
+                          margin: EdgeInsets.only(top: 20),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        )
+                      : AppButton(
+                          'LOGIN',
+                          onPressed: _onClickLogin,
+                        );
+                }),
           ],
         ),
       ),
@@ -98,21 +103,13 @@ class _LoginPageState extends State<LoginPage> {
     String login = _loginController.text;
     String senha = _senhaController.text;
 
-    setState(() {
-      _showProgress = true;
-    });
-
-    ApiResponse response = await LoginApi.login(login, senha);
+    ApiResponse response = await bloc.login(login, senha);
 
     if (response.isOk) {
       push(context, HomePage(), replace: true);
     } else {
       alertDialog(context, response.message);
     }
-
-    setState(() {
-      _showProgress = false;
-    });
   }
 
   String _validateLogin(String text) {
@@ -135,5 +132,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     super.dispose();
+
+    bloc.dispose();
   }
 }
