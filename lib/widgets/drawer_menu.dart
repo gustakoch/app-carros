@@ -50,7 +50,7 @@ class DrawerMenu extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
-              title: Text('Sair'),
+              title: Text('Desconectar'),
               onTap: () => _onClickLogout(context),
             ),
           ],

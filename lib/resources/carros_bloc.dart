@@ -6,11 +6,13 @@ class CarrosBloc {
   final streamController = StreamController<List<Carro>>();
   Stream<List<Carro>> get stream => streamController.stream;
 
-  loadCarros(String tipo) async {
+  Future loadCarros(String tipo) async {
     try {
       List<Carro> carros = await CarrosApi.getCarros(tipo);
 
       streamController.add(carros);
+
+      return carros;
     } catch (e) {
       streamController.addError(e);
     }

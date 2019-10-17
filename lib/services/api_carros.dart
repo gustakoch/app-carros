@@ -1,3 +1,4 @@
+import 'package:carros/favoritos/carro-dao.dart';
 import 'package:carros/resources/carro.dart';
 import 'package:carros/resources/usuario.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,10 @@ class CarrosApi {
     List list = json.decode(response.body);
 
     List<Carro> carros = list.map((item) => Carro.fromJson(item)).toList();
+
+    // Salvar os carros no sqlite
+    final dao = CarroDAO();
+    carros.forEach((Carro carro) => dao.save(carro));
 
     return carros;
   }
